@@ -9,11 +9,13 @@ alias gccc="git commit --amend --no-edit"
 alias ql=quick-look
 alias gmnf='git merge --no-ff --log=9999'
 alias delremotebranch="git branch -r --merged | egrep -v '(^\*|master|online|test)' | sed 's/origin\//:/'"
-alias jq="jsonpp"
+alias jq="json_pp"
 alias cleanGCDA='find . -name "*.gcda" -print0 | xargs -0 rm'
 alias resetMain='git reset --hard origin/main'
+alias mwo='make compile-wasm-only'
+alias mw='make compile-wasm'
 
-function deleteLocalBranchNoInRemote() {
+function deleteLocalBranchNoInRemote() {  
   git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D
 }
 
@@ -34,6 +36,62 @@ alias devs="kill3000;npm run dev:https"
 function delremotebranchfilter() {
   delremotebranch | grep $1 | awk '{print $1}' | xargs git push origin
 }
+
+function nb() {(set -e  
+  clean_up () {
+    ARG=$?
+    if [[ $ARG == 0 ]]; then
+      exit $ARG
+    fi
+
+
+    if [[ $gitDirty == 1 ]]; then
+      git stash pop
+    fi
+
+    echo "${logPrefix} exit for some Error!!! check the log above"
+    exit $ARG
+  } 
+  trap clean_up EXIT
+
+  if [ "$#" -ne 1 ]; then
+    branchName=`git rev-parse --abbrev-ref HEAD`
+  else
+    branchName=$1
+  fi
+
+
+  logPrefix="\n[new branch]:";
+
+  gitDirty=0;
+  if [[ $(git diff --stat) != '' || $(git diff --cached) != '' ]]; then
+    echo "${logPrefix} git work space is dirty, git stash it:"
+    echo "git stash"
+    git stash 
+    gitDirty=1;
+  fi
+
+  echo "${logPrefix} git checkout main"
+  git checkout main
+
+  echo "${logPrefix} git checkout main"
+  git pull --rebase
+
+  echo "${logPrefix} delete local branch no in remote:"
+  echo "git fetch -p && git branch -vv | awk '/: gone]/{print \$1}' | xargs git branch -D"
+  git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D
+
+  echo "${logPrefix} git checkout -b ${branchName}"
+  git checkout -b $branchName
+
+  if [[ $gitDirty == 1 ]]; then
+    echo "${logPrefix} previous git work space is dirty, now git stash pop it"
+    echo "git stash pop"
+    git stash pop
+  fi
+
+)}
+
 
 # fenbi 跳板机器
 function pp { 
