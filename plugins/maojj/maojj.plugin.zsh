@@ -12,8 +12,9 @@ alias delremotebranch="git branch -r --merged | egrep -v '(^\*|master|online|tes
 alias jq="json_pp"
 alias cleanGCDA='find . -name "*.gcda" -print0 | xargs -0 rm'
 alias resetMain='git reset --hard origin/main'
-alias mwo='make compile-wasm-only'
-alias mw='make compile-wasm'
+alias start='kill3000; make proto start'
+alias makeWasmOnly='cmake --build cmake-build-debug-emscripten --target wk-wasm-only-for-web'
+alias makeTest='cmake --build cmake-build-debug --target wk-util-test wk-render-test wk-editor-render-test wk-document-test wk-handler-test'
 
 function deleteLocalBranchNoInRemote() {  
   git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D
@@ -26,6 +27,25 @@ function killport() {
   if [[ $pid -gt 0 ]]; then 
     kill -9 $pid
   fi
+}
+
+function wktest() {
+  cmake --build build --target wk-util-test wk-resource-test wk-render-element-test wk-render-tree-test wk-render-spatial-index-test wk-render-pass-test wk-render-editor-test wk-editor-render-test wk-document-test wk-handler-test wk-presenter-test wk-integration-test | tee build/compile.out
+
+
+  find . -name '*.gcda' -delete
+  (cd build/wk-integration-test && ./wk-integration-test)
+  (cd build/wk-handler/test && ./wk-handler-test)
+  (cd build/wk-presenter/test && ./wk-presenter-test)
+  (cd build/wk-util/test && ./wk-util-test)
+  (cd build/wk-resource/test && ./wk-resource-test)
+  (cd build/wk-render/wk-render-element/test && ./wk-render-element-test)
+  (cd build/wk-render/wk-render-tree/test && ./wk-render-tree-test)
+  (cd build/wk-render/wk-render-spatial-index/test && ./wk-render-spatial-index-test)
+  (cd build/wk-render/wk-render-pass/test && ./wk-render-pass-test)
+  (cd build/wk-render/wk-render-editor/test && ./wk-render-editor-test)
+  (cd build/wk-editor-render/test && ./wk-editor-render-test)
+  (cd build/wk-document/test && ./wk-document-test)
 }
 
 alias kill3000="killport 3000"
