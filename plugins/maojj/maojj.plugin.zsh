@@ -12,8 +12,10 @@ alias delremotebranch="git branch -r --merged | egrep -v '(^\*|master|online|tes
 alias jq="json_pp"
 alias cleanGCDA='find . -name "*.gcda" -print0 | xargs -0 rm'
 alias resetMain='git reset --hard origin/main'
-alias start='kill3000; make proto start'
-alias makeWasmOnly='cmake --build cmake-build-debug-emscripten --target wk-wasm-only-for-web'
+alias start='kill3000; pnpm i; pnpm start'
+# alias makeWasmOnly='cmake --build cmake-build-debug-emscripten --target wk-wasm-only-for-web'
+alias mwo='./scripts/wmk -wd wk-wasm-app-only-for-web-by-brotli'
+alias mwa='./scripts/wmk -wd wk-wasm-app-by-brotli'
 alias makeTest='cmake --build cmake-build-debug --target wk-util-test wk-render-test wk-editor-render-test wk-document-test wk-handler-test'
 
 function deleteLocalBranchNoInRemote() {  
@@ -77,7 +79,7 @@ function nb() {(set -e
   if [ "$#" -ne 1 ]; then
     branchName=`git rev-parse --abbrev-ref HEAD`
   else
-    branchName=$1
+    branchName="wk-$1"
   fi
 
 
@@ -140,3 +142,27 @@ alias lastkey="pp lk"
 alias sss="source ~/.zshrc"
 
 alias timestamp=$(date +%s)
+
+
+function poff() {
+        unset http_proxy
+        unset https_proxy
+        unset ftp_proxy
+        unset rsync_proxy
+        echo -e "已关闭公司代理"
+}
+
+function pon() {
+        export no_proxy="localhost,127.0.0.1,local.yuanfudao.biz,.yuanfudao.com,.yuanfudao.biz,.zhenguanyu.com"
+        export http_proxy="http://proxy.zhenguanyu.com:8118"
+        export https_proxy=$http_proxy
+        export ftp_proxy=$http_proxy
+        export rsync_proxy=$http_proxy
+        export HTTP_PROXY=$http_proxy
+        export HTTPS_PROXY=$http_proxy
+        export FTP_PROXY=$http_proxy
+        export RSYNC_PROXY=$http_proxy
+        echo -e "已开启公司代理"
+}
+
+
