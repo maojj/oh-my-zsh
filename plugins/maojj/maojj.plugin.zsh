@@ -14,8 +14,8 @@ alias cleanGCDA='find . -name "*.gcda" -print0 | xargs -0 rm'
 alias resetMain='git reset --hard origin/main'
 alias start='kill3000; pnpm i; pnpm start'
 # alias makeWasmOnly='cmake --build cmake-build-debug-emscripten --target wk-wasm-only-for-web'
-alias mwo='./scripts/wmk -wd wk-wasm-app-only-for-web-by-brotli'
-alias mwa='./scripts/wmk -wd wk-wasm-app-by-brotli'
+alias ooo='./scripts/wmk -wd wk-wasm-app-only-for-web-by-brotli'
+alias aaa='./scripts/wmk -wd wk-wasm-app-by-brotli'
 alias makeTest='cmake --build cmake-build-debug --target wk-util-test wk-render-test wk-editor-render-test wk-document-test wk-handler-test'
 
 function deleteLocalBranchNoInRemote() {  
