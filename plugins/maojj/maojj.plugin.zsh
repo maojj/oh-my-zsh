@@ -101,7 +101,7 @@ function nb() {(set -e
 
   echo "${logPrefix} delete local branch no in remote:"
   echo "git fetch -p && git branch -vv | awk '/: gone]/{print \$1}' | xargs git branch -D"
-  git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D
+  git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D || true
 
   echo "${logPrefix} git checkout -b ${branchName}"
   git checkout -b $branchName
