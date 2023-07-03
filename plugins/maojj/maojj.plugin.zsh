@@ -1,5 +1,6 @@
 alias gdc="gdca"
 alias push="git push -u origin HEAD"
+alias pushf="git push --force -u origin HEAD"
 alias p="maojjpush"
 alias sortfolder="du | sort -nr | cut -f2- | xargs du -hs"
 alias glsubmodule="git submodule foreach git pull origin master:master"
