@@ -81,7 +81,7 @@ function nb() {(set -e
   if [ "$#" -ne 1 ]; then
     branchName=`git rev-parse --abbrev-ref HEAD`
   else
-    branchName="wk-$1"
+    branchName="maojj/wk-$1"
   fi
 
 
