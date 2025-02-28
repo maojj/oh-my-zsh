@@ -20,6 +20,8 @@ alias ooo='./scripts/wmk -wd wk-wasm-app-only-for-web-by-brotli'
 alias aaa='./scripts/wmk -wd wk-wasm-app-by-brotli'
 alias makeTest='cmake --build cmake-build-debug --target wk-util-test wk-render-test wk-editor-render-test wk-document-test wk-handler-test'
 alias fixup='gcmsg fixup;push'
+alias pre='pnpm export-import'
+alias kill3000='lsof -ti:3000 -sTCP:LISTEN | xargs -r kill -9'
 
 function deleteLocalBranchNoInRemote() {  
   git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D
