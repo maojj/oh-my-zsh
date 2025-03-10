@@ -1,0 +1,16 @@
+#compdef q
+
+function _q_targets() {
+  local _targets=()
+  while read -r line
+  do
+    _targets+=($line)
+  done <<< $(q -l | sed -nE 's/\*  ([a-zA-Z:\-]+)[ ]+- (.+?)/\1;\2/p' | sed -e 's/:/\\:/g' | sed -e 's/;/:/g')
+  _describe 'q targets' _targets
+}
+
+function _q() {
+  _arguments ': :_q_targets'
+}
+
+_q "$@"
