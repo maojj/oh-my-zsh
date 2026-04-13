@@ -84,11 +84,12 @@ function nb() {(set -e
   if [ "$#" -ne 1 ]; then
     branchName=`git rev-parse --abbrev-ref HEAD`
   else
-    branchName="maojj/feat-$1"
+    branchName="feat-$1"
   fi
 
 
   logPrefix="\n[new branch]:";
+  mainBrande="deploy-test"
 
   gitDirty=0;
   if [[ $(git diff --stat) != '' || $(git diff --cached) != '' ]]; then
@@ -98,10 +99,10 @@ function nb() {(set -e
     gitDirty=1;
   fi
 
-  echo "${logPrefix} git checkout main"
-  git checkout main
+  echo "${logPrefix} git checkout ${mainBrande}"
+  git checkout $mainBrande
 
-  echo "${logPrefix} git checkout main"
+  echo "${logPrefix} git pull"
   git pull --rebase
 
   echo "${logPrefix} delete local branch no in remote:"
@@ -150,16 +151,15 @@ alias timestamp=$(date +%s)
 
 
 function poff() {
-        unset http_proxy
-        unset https_proxy
-        unset ftp_proxy
-        unset rsync_proxy
+        unset http_proxy https_proxy ftp_proxy rsync_proxy
+        unset HTTP_PROXY HTTPS_PROXY FTP_PROXY RSYNC_PROXY
+        unset no_proxy NO_PROXY
         echo -e "已关闭公司代理"
 }
 
 function pon() {
         export no_proxy="localhost,127.0.0.1,local.yuanfudao.biz,.yuanfudao.com,.yuanfudao.biz,.zhenguanyu.com"
-        export http_proxy="http://proxy.zhenguanyu.com:8118"
+        export http_proxy="http://proxy-aws-us.zhenguanyu.com:8118"
         export https_proxy=$http_proxy
         export ftp_proxy=$http_proxy
         export rsync_proxy=$http_proxy
@@ -167,6 +167,7 @@ function pon() {
         export HTTPS_PROXY=$http_proxy
         export FTP_PROXY=$http_proxy
         export RSYNC_PROXY=$http_proxy
+        export NO_PROXY=$no_proxy
         echo -e "已开启公司代理"
 }
 
